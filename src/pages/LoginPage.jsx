@@ -6,19 +6,32 @@ import {
   CircleAlert,
   Eye,
   EyeOff,
-  HandHeart,
   LoaderCircle,
   LockKeyhole,
   ScanSearch,
   User,
 } from 'lucide-react'
 import { useAuth } from '../auth/AuthProvider.jsx'
+import { ROLE_HOME, isRolePath } from '../auth/roles.js'
+import Brand from '../components/Brand.jsx'
 import ThemePicker from '../components/ThemePicker.jsx'
 
 const HIGHLIGHTS = [
-  { icon: Calculator, title: 'Metode SAW', text: 'Perangkingan dengan Simple Additive Weighting.' },
-  { icon: ScanSearch, title: 'Transparan', text: 'Hasil dapat dilihat dan diverifikasi per KK.' },
-  { icon: BadgeCheck, title: 'Akurat', text: 'Menggunakan data dan kriteria yang terukur.' },
+  {
+    icon: Calculator,
+    title: 'Metode SAW',
+    text: 'Perangkingan dengan Simple Additive Weighting.',
+  },
+  {
+    icon: ScanSearch,
+    title: 'Transparan',
+    text: 'Hasil dapat dilihat dan diverifikasi per KK.',
+  },
+  {
+    icon: BadgeCheck,
+    title: 'Akurat',
+    text: 'Menggunakan data dan kriteria yang terukur.',
+  },
 ]
 
 const YEAR = new Date().getFullYear()
@@ -33,7 +46,7 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
 
-  if (status === 'authenticated') return <Navigate to="/" replace />
+  if (status === 'authenticated' && !submitting) return <Navigate to="/" replace />
 
   function update(field) {
     return (e) => {
@@ -52,8 +65,10 @@ export default function LoginPage() {
     setSubmitting(true)
     setError(null)
     try {
-      await login(form.username.trim(), form.password)
-      navigate(location.state?.from?.pathname ?? '/', { replace: true })
+      const user = await login(form.username.trim(), form.password)
+      const from = location.state?.from?.pathname
+      const target = from && isRolePath(user.role, from) ? from : ROLE_HOME[user.role]
+      navigate(target, { replace: true, state: { welcome: true } })
     } catch (err) {
       setError({ message: err.message, fields: err.details ?? {} })
       setSubmitting(false)
@@ -172,20 +187,6 @@ export default function LoginPage() {
           <span>© {YEAR} SPK Bansos · Kelompok C</span>
         </footer>
       </main>
-    </div>
-  )
-}
-
-function Brand() {
-  return (
-    <div className="flex items-center gap-3">
-      <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-fg">
-        <HandHeart className="size-6" aria-hidden />
-      </span>
-      <div className="leading-tight">
-        <p className="text-lg font-bold">SPK Bansos</p>
-        <p className="text-xs opacity-75">Sistem Pendukung Keputusan Penerima Bantuan Sosial</p>
-      </div>
     </div>
   )
 }

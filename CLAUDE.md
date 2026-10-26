@@ -30,22 +30,39 @@ src/main.jsx          entry: RouterProvider (from react-router/dom)
 src/router.jsx        route table (createBrowserRouter from react-router)
 src/lib/api.js        fetch wrapper — always use api('/path', { method, body }); throws ApiError
 src/auth/             AuthProvider (useAuth: status, user, login, logout; restores session via /auth/me),
-                      RequireAuth (layout route → /login for guests)
-src/components/       shared UI (ThemePicker, FullPageSpinner)
+                      RequireAuth (guests → /login), RequireRole (wrong role → 403 page in place),
+                      roles.js (ROLE_LABELS, ROLE_HOME: desa → /desa, rt → /rt)
+src/layouts/          AppLayout (sidebar + header + login welcome modal), navigation.js (menu per role;
+                      router builds /desa/* and /rt/* from it, unbuilt pages → ComingSoonPage)
+src/components/       shared UI (Brand, Modal, ThemePicker, FullPageSpinner)
 src/pages/            route-level components
 src/theme/themes.js   color themes (constants) + applyTheme; ThemeProvider.jsx exposes useTheme()
 src/index.css         Tailwind entry; maps --theme-* vars to Tailwind colors (@theme inline)
 ```
 
-Planned additions: `src/layouts/` (RtLayout mobile-first, DesaLayout desktop sidebar),
-role guard (`/403` for wrong role). Icons: `lucide-react` (per the design style guide).
+To build a menu page: create it in `src/pages/` and add it to `PAGES` in `router.jsx` under its nav path.
+Icons: `lucide-react` (per the design style guide).
 
 ## Conventions
 
 - Same-origin API: always call relative `/api/...` (via `lib/api.js`), never a hard-coded host.
   Session cookie auth relies on this (Vite proxy in dev, nginx in Docker).
-- Two UIs by role: `rt` pages are mobile-first (design at 360px width first); `desa` pages are
-  desktop dashboards.
+- Current priority: desktop website only, for both roles. Don't build mobile-specific UI or spend
+  time on mobile polish yet; keep the existing responsive bits (sidebar drawer) as they are.
+  Later goal (workspace domain summary): `rt` pages mobile-first, `desa` pages desktop dashboards.
+- Code style (owner's preference): avoid long lines that run far to the right. Break objects,
+  arrays, function arguments and JSX props one item per line once they hold several items, always
+  starting a new line right after the opening `{` / `[` (never `{ icon: X,` on the brace line), e.g.
+  ```js
+  const HIGHLIGHTS = [
+    {
+      icon: Calculator,
+      title: 'Metode SAW',
+      text: 'Perangkingan dengan Simple Additive Weighting.',
+    },
+  ]
+  ```
+  Very long className strings may be split across lines with a template literal.
 - Styling with Tailwind utility classes only; no extra CSS files unless unavoidable.
 - Colors: use the theme tokens (`bg-primary`, `text-primary-fg`, `bg-surface`, `bg-surface-alt`,
   `text-fg`, `text-fg-muted`, `border-border`, `bg-sidebar`, `text-success`, `bg-danger/10`, ...),

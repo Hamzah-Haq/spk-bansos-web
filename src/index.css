@@ -1,1 +1,31 @@
 @import "tailwindcss";
+
+/* Theme colors: values come from src/theme/themes.js (set on <html> by ThemeProvider).
+   Usage: bg-primary, text-primary-fg, bg-surface, text-fg-muted, border-border, bg-danger/10 ... */
+@theme inline {
+  --color-brand: var(--theme-brand);
+  --color-primary: var(--theme-primary);
+  --color-primary-fg: var(--theme-primary-fg);
+  --color-background: var(--theme-background);
+  --color-surface: var(--theme-surface);
+  --color-surface-alt: var(--theme-surface-alt);
+  --color-border: var(--theme-border);
+  --color-fg: var(--theme-fg);
+  --color-fg-muted: var(--theme-fg-muted);
+  --color-sidebar: var(--theme-sidebar);
+  --color-sidebar-fg: var(--theme-sidebar-fg);
+  --color-sidebar-muted: var(--theme-sidebar-muted);
+  --color-success: var(--theme-success);
+  --color-warning: var(--theme-warning);
+  --color-danger: var(--theme-danger);
+  --color-info: var(--theme-info);
+
+  /* Style guide font: Inter (400/500/600/700) */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-fg antialiased;
+  }
+}

@@ -30,7 +30,8 @@ src/main.jsx          entry: RouterProvider (from react-router/dom)
 src/router.jsx        route table (createBrowserRouter from react-router)
 src/lib/api.js        fetch wrapper — always use api('/path', { method, body }); throws ApiError
 src/pages/            route-level components
-src/index.css         Tailwind entry (@import "tailwindcss")
+src/theme/themes.js   color themes (constants) + applyTheme; ThemeProvider.jsx exposes useTheme()
+src/index.css         Tailwind entry; maps --theme-* vars to Tailwind colors (@theme inline)
 ```
 
 Planned additions: `src/layouts/` (RtLayout mobile-first, DesaLayout desktop sidebar),
@@ -43,5 +44,10 @@ Planned additions: `src/layouts/` (RtLayout mobile-first, DesaLayout desktop sid
 - Two UIs by role: `rt` pages are mobile-first (design at 360px width first); `desa` pages are
   desktop dashboards.
 - Styling with Tailwind utility classes only; no extra CSS files unless unavoidable.
+- Colors: use the theme tokens (`bg-primary`, `text-primary-fg`, `bg-surface`, `bg-surface-alt`,
+  `text-fg`, `text-fg-muted`, `border-border`, `bg-sidebar`, `text-success`, `bg-danger/10`, ...),
+  never raw palette classes like `bg-blue-600` — the user can switch themes at runtime
+  (`useTheme().setThemeId`, saved in localStorage). Add/change colors only in `src/theme/themes.js`
+  (every theme must define the same keys) and map new keys in `index.css`.
 - React Router 8 data mode: `createBrowserRouter` / `Link` / `useNavigate` from `react-router`,
   `RouterProvider` from `react-router/dom`.

@@ -1,5 +1,3 @@
-// Thin fetch wrapper for the Express API. All calls go through here so
-// credentials (session cookie) and error shape stay consistent.
 export class ApiError extends Error {
   constructor(status, message, details) {
     super(message)

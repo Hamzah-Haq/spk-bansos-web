@@ -3,12 +3,18 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router/dom'
 import './index.css'
 import { router } from './router.jsx'
+import { AuthProvider } from './auth/AuthProvider.jsx'
 import { ThemeProvider } from './theme/ThemeProvider.jsx'
+import { applyTheme, loadThemeId } from './theme/themes.js'
+
+applyTheme(loadThemeId())
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </ThemeProvider>
   </StrictMode>,
 )

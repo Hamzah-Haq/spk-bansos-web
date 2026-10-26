@@ -6,7 +6,6 @@ const ThemeContext = createContext(null)
 export function ThemeProvider({ children }) {
   const [themeId, setThemeIdState] = useState(loadThemeId)
 
-  // Layout effect: colors are applied before the first paint, so no flash of the default theme.
   useLayoutEffect(() => applyTheme(themeId), [themeId])
 
   const setThemeId = useCallback((id) => {
@@ -23,7 +22,7 @@ export function ThemeProvider({ children }) {
   return <ThemeContext value={value}>{children}</ThemeContext>
 }
 
-// eslint-disable-next-line react/only-export-components -- hook belongs with its provider
+// eslint-disable-next-line react/only-export-components
 export function useTheme() {
   const ctx = useContext(ThemeContext)
   if (!ctx) throw new Error('useTheme must be used inside <ThemeProvider>')

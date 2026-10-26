@@ -29,13 +29,16 @@ Docker: built by the backend repo's `docker-compose.yml` (multi-stage → nginx,
 src/main.jsx          entry: RouterProvider (from react-router/dom)
 src/router.jsx        route table (createBrowserRouter from react-router)
 src/lib/api.js        fetch wrapper — always use api('/path', { method, body }); throws ApiError
+src/auth/             AuthProvider (useAuth: status, user, login, logout; restores session via /auth/me),
+                      RequireAuth (layout route → /login for guests)
+src/components/       shared UI (ThemePicker, FullPageSpinner)
 src/pages/            route-level components
 src/theme/themes.js   color themes (constants) + applyTheme; ThemeProvider.jsx exposes useTheme()
 src/index.css         Tailwind entry; maps --theme-* vars to Tailwind colors (@theme inline)
 ```
 
 Planned additions: `src/layouts/` (RtLayout mobile-first, DesaLayout desktop sidebar),
-`src/components/`, auth context + route guards (redirect to /login, /403 for wrong role).
+role guard (`/403` for wrong role). Icons: `lucide-react` (per the design style guide).
 
 ## Conventions
 

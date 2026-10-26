@@ -1,9 +1,14 @@
 import { createBrowserRouter } from 'react-router'
+import RequireAuth from './auth/RequireAuth.jsx'
 import HomePage from './pages/HomePage.jsx'
+import LoginPage from './pages/LoginPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 
-// Planned: /login, /rt/* (mobile layout, role rt), /desa/* (desktop layout, role desa), /403.
 export const router = createBrowserRouter([
-  { path: '/', element: <HomePage /> },
+  { path: '/login', element: <LoginPage /> },
+  {
+    element: <RequireAuth />,
+    children: [{ path: '/', element: <HomePage /> }],
+  },
   { path: '*', element: <NotFoundPage /> },
 ])

@@ -19,9 +19,25 @@ export default function ThemePicker({ className = '' }) {
             className={`flex size-7 items-center justify-center rounded-full border-2 transition ${
               active ? 'border-fg' : 'border-border hover:border-fg-muted'
             }`}
-            style={{ background: `linear-gradient(135deg, ${t.colors.sidebar} 50%, ${t.colors.primary} 50%)` }}
+            style={{
+              background: t.colors.sidebar,
+            }}
           >
-            {active && <Check className="size-3.5 text-white drop-shadow" strokeWidth={3} aria-hidden />}
+            <span
+              className="flex size-4 items-center justify-center rounded-full"
+              style={{
+                background: t.colors.primary,
+                color: t.colors.primaryFg,
+              }}
+            >
+              {active && (
+                <Check
+                  className="size-3"
+                  strokeWidth={3}
+                  aria-hidden
+                />
+              )}
+            </span>
           </button>
         )
       })}

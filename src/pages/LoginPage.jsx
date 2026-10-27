@@ -16,23 +16,23 @@ import { ROLE_HOME, isRolePath } from '../auth/roles.js'
 import Brand from '../components/Brand.jsx'
 import ThemePicker from '../components/ThemePicker.jsx'
 
-const HIGHLIGHTS = [
-  {
-    icon: Calculator,
-    title: 'Metode SAW',
-    text: 'Perangkingan dengan Simple Additive Weighting.',
-  },
-  {
-    icon: ScanSearch,
-    title: 'Transparan',
-    text: 'Hasil dapat dilihat dan diverifikasi per KK.',
-  },
-  {
-    icon: BadgeCheck,
-    title: 'Akurat',
-    text: 'Menggunakan data dan kriteria yang terukur.',
-  },
-]
+// const HIGHLIGHTS = [
+//   {
+//     icon: Calculator,
+//     title: 'Metode SAW',
+//     text: 'Perangkingan dengan Simple Additive Weighting.',
+//   },
+//   {
+//     icon: ScanSearch,
+//     title: 'Transparan',
+//     text: 'Hasil dapat dilihat dan diverifikasi per KK.',
+//   },
+//   {
+//     icon: BadgeCheck,
+//     title: 'Akurat',
+//     text: 'Menggunakan data dan kriteria yang terukur.',
+//   },
+// ]
 
 const YEAR = new Date().getFullYear()
 
@@ -86,8 +86,8 @@ export default function LoginPage() {
           </p>
           <span className="mt-5 block h-1 w-14 rounded-full bg-primary" />
 
-          <ul className="mt-10 space-y-5">
-            {HIGHLIGHTS.map(({ icon: Icon, title, text }) => (
+            <ul className="mt-10 space-y-5">
+            {/* {HIGHLIGHTS.map(({ icon: Icon, title, text }) => (
               <li key={title} className="flex items-start gap-4">
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/20 text-sidebar-fg">
                   <Icon className="size-5" aria-hidden />
@@ -97,7 +97,7 @@ export default function LoginPage() {
                   <p className="text-sm text-sidebar-muted">{text}</p>
                 </div>
               </li>
-            ))}
+            ))} */}
           </ul>
         </div>
 

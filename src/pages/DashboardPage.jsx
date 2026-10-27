@@ -42,7 +42,7 @@ export default function DashboardPage() {
           </dl>
         </Card>
 
-        <Card title="Status Sistem">
+        {/* <Card title="Status Sistem">
           <dl className="space-y-3 text-sm">
             <StatusRow label="API" ok={health.state === 'ok'} loading={health.state === 'loading'} />
             <StatusRow
@@ -54,7 +54,7 @@ export default function DashboardPage() {
           {health.state === 'error' && (
             <p className="mt-4 rounded-lg bg-danger/10 p-3 text-sm text-danger">{health.message}</p>
           )}
-        </Card>
+        </Card> */}
       </div>
 
       <section>

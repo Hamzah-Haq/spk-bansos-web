@@ -10,9 +10,17 @@ import DashboardPage from './pages/DashboardPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 import SettingsPage from './pages/SettingsPage.jsx'
+import AkunPage from './pages/akun/AkunPage.jsx'
+import KkPage from './pages/kk/KkPage.jsx'
+import PeriodePage from './pages/periode/PeriodePage.jsx'
 
+// Nav path → page. Both roles share a key's page; role-only pages only appear in that role's NAV.
 const PAGES = {
   '': <DashboardPage />,
+  warga: <KkPage />,
+  kk: <KkPage />,
+  periode: <PeriodePage />,
+  akun: <AkunPage />,
   pengaturan: <SettingsPage />,
 }
 

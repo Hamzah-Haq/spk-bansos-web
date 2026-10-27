@@ -1,5 +1,6 @@
 import { Check } from 'lucide-react'
 import { useTheme } from '../theme/ThemeProvider.jsx'
+import ChangePasswordCard from './ChangePasswordCard.jsx'
 
 export default function SettingsPage() {
   const { theme, themes, setThemeId } = useTheme()
@@ -8,8 +9,10 @@ export default function SettingsPage() {
     <div className="mx-auto max-w-6xl space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Pengaturan</h1>
-        <p className="mt-1 text-sm text-fg-muted">Sesuaikan tampilan aplikasi.</p>
+        <p className="mt-1 text-sm text-fg-muted">Sesuaikan tampilan aplikasi dan keamanan akun Anda.</p>
       </div>
+
+      <ChangePasswordCard />
 
       <section className="rounded-xl border border-border bg-surface p-5 shadow-sm">
         <h2 className="font-semibold">Tema Warna</h2>

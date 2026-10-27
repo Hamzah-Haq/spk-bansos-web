@@ -1,6 +1,11 @@
 import { useEffect, useRef } from 'react'
 
-export default function Modal({ open, onClose, labelledBy, children }) {
+const SIZES = {
+  sm: 'max-w-sm',
+  md: 'max-w-lg',
+}
+
+export default function Modal({ open, onClose, labelledBy, size = 'sm', children }) {
   const ref = useRef(null)
 
   useEffect(() => {
@@ -14,7 +19,7 @@ export default function Modal({ open, onClose, labelledBy, children }) {
       ref={ref}
       onClose={onClose}
       aria-labelledby={labelledBy}
-      className="m-auto w-[calc(100%-2rem)] max-w-sm rounded-2xl border border-border bg-surface p-0 text-fg shadow-xl backdrop:bg-black/50"
+      className={`m-auto w-[calc(100%-2rem)] ${SIZES[size]} rounded-2xl border border-border bg-surface p-0 text-fg shadow-xl backdrop:bg-black/50`}
     >
       {children}
     </dialog>

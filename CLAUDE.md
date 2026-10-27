@@ -28,19 +28,31 @@ Docker: built by the backend repo's `docker-compose.yml` (multi-stage → nginx,
 ```
 src/main.jsx          entry: RouterProvider (from react-router/dom)
 src/router.jsx        route table (createBrowserRouter from react-router)
-src/lib/api.js        fetch wrapper — always use api('/path', { method, body }); throws ApiError
-src/auth/             AuthProvider (useAuth: status, user, login, logout; restores session via /auth/me),
+src/lib/api.js        fetch wrapper — always use api('/path', { method, body }); throws ApiError;
+                      withQuery(path, params) drops empty params; a 401 outside /auth/* logs the user out
+src/lib/hooks.js      useApiQuery(path) → { data, error, loading, reload }; useForm(initial) → field(name),
+                      submit(action, validate?), error, submitting; useDebouncedValue
+src/lib/format.js     formatRt(rt) → "RT 001 / RW 001" (null → "Seluruh desa")
+src/auth/             AuthProvider (useAuth: status, user, login, logout, refreshUser; restores session via /auth/me),
                       RequireAuth (guests → /login), RequireRole (wrong role → 403 page in place),
                       roles.js (ROLE_LABELS, ROLE_HOME: desa → /desa, rt → /rt)
 src/layouts/          AppLayout (sidebar + header + login welcome modal), navigation.js (menu per role;
                       router builds /desa/* and /rt/* from it, unbuilt pages → ComingSoonPage)
-src/components/       shared UI (Brand, Modal, ThemePicker, FullPageSpinner)
-src/pages/            route-level components
+src/components/       shared UI: Brand, Modal (size sm|md), ThemePicker, FullPageSpinner, PageHeader,
+                      Button + IconButton, Badge, Alert, TextField/SelectField (FormField.jsx),
+                      FormModal, ConfirmDialog, DataTable + Pagination, Toast (useToast)
+src/pages/            route-level components; a feature with several files gets a folder
+                      (akun/ = Manajemen Akun: users + wilayah RT tabs, periode/, kk/ = Data KK for both roles)
 src/theme/themes.js   color themes (constants) + applyTheme; ThemeProvider.jsx exposes useTheme()
 src/index.css         Tailwind entry; maps --theme-* vars to Tailwind colors (@theme inline)
 ```
 
 To build a menu page: create it in `src/pages/` and add it to `PAGES` in `router.jsx` under its nav path.
+
+CRUD page pattern (see `pages/periode/PeriodePage.jsx`): `useApiQuery` for the list → `DataTable`;
+one `dialog` state `{ type, item }`; render `FormModal`/`ConfirmDialog` only while open so forms start
+fresh; on success `toast.success(...)`, close, `query.reload()`. Validate on the client for quick
+feedback, but the API is the source of truth: its `error.details` show under the matching fields.
 Icons: `lucide-react` (per the design style guide).
 
 ## Conventions
@@ -64,6 +76,8 @@ Icons: `lucide-react` (per the design style guide).
   ```
   Very long className strings may be split across lines with a template literal.
 - Styling with Tailwind utility classes only; no extra CSS files unless unavoidable.
+- Flat, solid colors only: no gradients (`bg-linear-*`, `from-*/to-*`, `linear-gradient(...)`)
+  for backgrounds, buttons, cards or swatches — the owner wants a hand-crafted, natural look.
 - Colors: use the theme tokens (`bg-primary`, `text-primary-fg`, `bg-surface`, `bg-surface-alt`,
   `text-fg`, `text-fg-muted`, `border-border`, `bg-sidebar`, `text-success`, `bg-danger/10`, ...),
   never raw palette classes like `bg-blue-600` — the user can switch themes at runtime

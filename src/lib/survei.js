@@ -19,6 +19,37 @@ export const STATUS_SURVEI = {
   },
 }
 
+// Segments of the survey-progress bar, in pipeline order (most advanced first). Status colors are
+// reserved for these states and always shown with a label.
+export const PROGRESS_SEGMENTS = [
+  {
+    key: 'verified',
+    label: 'Terverifikasi',
+    className: 'bg-success',
+  },
+  {
+    key: 'submitted',
+    label: 'Menunggu verifikasi',
+    className: 'bg-info',
+  },
+  {
+    key: 'rejected',
+    label: 'Perlu revisi',
+    className: 'bg-danger',
+  },
+  {
+    key: 'draft',
+    label: 'Draf',
+    className: 'bg-fg-muted/50',
+  },
+]
+
+export const BELUM_DISURVEI = {
+  key: 'belum',
+  label: 'Belum disurvei',
+  className: 'bg-surface-alt ring-1 ring-border ring-inset',
+}
+
 export const STATUS_SURVEI_OPTIONS = Object.entries(STATUS_SURVEI).map(([value, { label }]) => ({ value, label }))
 
 // Same order and keys as the API's JenisFoto enum; one photo per jenis

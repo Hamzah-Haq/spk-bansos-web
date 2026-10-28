@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import { Eye, Pencil, Plus, Search, Trash2 } from 'lucide-react'
 import { useAuth } from '../auth/AuthProvider.jsx'
 import { ROLE_HOME } from '../auth/roles.js'
@@ -28,14 +28,16 @@ export default function SurveiPage() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const toast = useToast()
+  // Dashboard links open the list pre-filtered, e.g. ?status=rejected
+  const [searchParams] = useSearchParams()
 
   const periodeQuery = useApiQuery('/periode')
   const periodeList = periodeQuery.data?.data ?? []
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState(() => ({
     periodeId: '',
-    status: '',
+    status: STATUS_SURVEI[searchParams.get('status')] ? searchParams.get('status') : '',
     q: '',
-  })
+  }))
   const [page, setPage] = useState(1)
   // { type: 'create' | 'delete', survei? }
   const [dialog, setDialog] = useState(null)

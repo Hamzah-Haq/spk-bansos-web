@@ -9,6 +9,7 @@ import AkunPage from './pages/AkunPage.jsx'
 import ComingSoonPage from './pages/ComingSoonPage.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
 import KkPage from './pages/KkPage.jsx'
+import KriteriaPage from './pages/KriteriaPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 import PeriodePage from './pages/PeriodePage.jsx'
@@ -19,6 +20,7 @@ const PAGES = {
   '': <DashboardPage />,
   warga: <KkPage />,
   kk: <KkPage />,
+  kriteria: <KriteriaPage />,
   periode: <PeriodePage />,
   akun: <AkunPage />,
   pengaturan: <SettingsPage />,

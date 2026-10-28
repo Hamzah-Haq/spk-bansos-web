@@ -1,6 +1,7 @@
 import Input from '../atoms/Input.jsx'
 import Label from '../atoms/Label.jsx'
 import Select from '../atoms/Select.jsx'
+import Textarea from '../atoms/Textarea.jsx'
 
 function Field({ id, label, error, hint, children }) {
   return (
@@ -35,6 +36,27 @@ export function TextField({ id, label, error, hint, ...inputProps }) {
         aria-describedby={error ? `${id}-error` : undefined}
         className="w-full"
         {...inputProps}
+      />
+    </Field>
+  )
+}
+
+// Same as TextField but multi-line; extra props go to <Textarea>
+export function TextAreaField({ id, label, error, hint, ...textareaProps }) {
+  return (
+    <Field
+      id={id}
+      label={label}
+      error={error}
+      hint={hint}
+    >
+      <Textarea
+        id={id}
+        name={id}
+        invalid={Boolean(error)}
+        aria-describedby={error ? `${id}-error` : undefined}
+        className="w-full"
+        {...textareaProps}
       />
     </Field>
   )

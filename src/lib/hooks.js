@@ -71,7 +71,9 @@ export function useForm(initialValues) {
       await action(values)
     } catch (err) {
       const details = err.details ?? {}
-      const allShownInline = Object.keys(details).length > 0 && Object.keys(details).every((key) => key in values)
+      // 'opsi.0.label' belongs to the `opsi` value; the form shows it next to that list row
+      const allShownInline =
+        Object.keys(details).length > 0 && Object.keys(details).every((key) => key.split('.')[0] in values)
       setErrors(details)
       setError(allShownInline ? null : err.message)
     } finally {
@@ -83,6 +85,9 @@ export function useForm(initialValues) {
     values,
     setValues,
     field,
+    // { field: message }; for list inputs that field() can't bind (keys like 'opsi.0.label')
+    errors,
+    setErrors,
     error,
     submitting,
     submit,

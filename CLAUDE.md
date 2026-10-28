@@ -31,8 +31,11 @@ src/router.jsx        route table (createBrowserRouter from react-router)
 src/lib/api.js        fetch wrapper — always use api('/path', { method, body }); throws ApiError;
                       withQuery(path, params) drops empty params; a 401 outside /auth/* logs the user out
 src/lib/hooks.js      useApiQuery(path) → { data, error, loading, reload }; useForm(initial) → field(name),
-                      submit(action, validate?), error, submitting; useDebouncedValue
-src/lib/format.js     formatRt(rt) → "RT 001 / RW 001" (null → "Seluruh desa")
+                      submit(action, validate?), errors/setErrors (list keys like 'opsi.0.label'), error,
+                      submitting; useDebouncedValue
+src/lib/format.js     formatRt(rt) → "RT 001 / RW 001" (null → "Seluruh desa"); formatBobot(0.3) → "0,300";
+                      parseDecimal("0,3" | "0.3") → 0.3 (NaN if not a number)
+src/lib/kriteria.js   SIFAT (label, tone, rumus), SIFAT_OPTIONS, rumusKonversi(kriteria) → "C2 = (2a + 2b) / 2", MIN_OPSI
 src/auth/             AuthProvider (useAuth: status, user, login, logout, refreshUser; restores session via /auth/me),
                       RequireAuth (guests → /login), RequireRole (wrong role → 403 page in place),
                       roles.js (ROLE_LABELS, ROLE_HOME: desa → /desa, rt → /rt)
@@ -49,14 +52,16 @@ A component imports only from its own level or lower ones (atoms → molecules �
 
 ```
 atoms/       single elements, no app data: Button, IconButton, Badge, Spinner, Label,
-             Input (invalid, size sm|md, leading icon / trailing), Select (options, placeholder),
-             control.js (shared Input/Select classes)
-molecules/   small groups of atoms: TextField/SelectField (FormField.jsx), Alert, Card (title + description
-             + body), InfoRow, PageHeader, Pagination, Tabs, Brand, ThemePicker, FullPageSpinner
+             Input (invalid, size sm|md, leading icon / trailing), Select (options, placeholder), Textarea,
+             control.js (shared Input/Select/Textarea classes)
+molecules/   small groups of atoms: TextField/TextAreaField/SelectField (FormField.jsx), Alert (danger |
+             warning | info), Card (title + description + header actions + body), InfoRow, PageHeader,
+             Pagination, Tabs, Brand, ThemePicker, FullPageSpinner
 organisms/   self-contained sections; generic ones at the top level (Modal size sm|md, FormModal,
              ConfirmDialog, DataTable, Toast → ToastProvider/useToast), feature ones in a folder per
              feature: layout/ (Sidebar, Topbar, WelcomeModal), login/, dashboard/, settings/,
-             akun/ (UsersPanel, RtPanel + their modals), kk/ (KkFormModal, RtFilter), periode/
+             akun/ (UsersPanel, RtPanel + their modals), kk/ (KkFormModal, RtFilter), periode/,
+             kriteria/ (KriteriaTable, KuesionerSection, Kriteria/Bobot/Pertanyaan/OpsiFormModal)
 templates/   page skeletons without data: DashboardTemplate (route element: sidebar + header + <Outlet/>),
              PageTemplate (title/description/actions + content column), AuthTemplate (login split screen),
              StatusTemplate (403/404)

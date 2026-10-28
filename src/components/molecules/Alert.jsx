@@ -1,9 +1,13 @@
-import { CircleAlert, Info } from 'lucide-react'
+import { CircleAlert, Info, TriangleAlert } from 'lucide-react'
 
 const TONES = {
   danger: {
     icon: CircleAlert,
     className: 'border-danger/30 bg-danger/10 text-danger',
+  },
+  warning: {
+    icon: TriangleAlert,
+    className: 'border-warning/30 bg-warning/10 text-warning',
   },
   info: {
     icon: Info,

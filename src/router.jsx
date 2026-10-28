@@ -16,6 +16,8 @@ import PeriodePage from './pages/PeriodePage.jsx'
 import SettingsPage from './pages/SettingsPage.jsx'
 import SurveiFormPage from './pages/SurveiFormPage.jsx'
 import SurveiPage from './pages/SurveiPage.jsx'
+import VerifikasiDetailPage from './pages/VerifikasiDetailPage.jsx'
+import VerifikasiPage from './pages/VerifikasiPage.jsx'
 
 // Nav path → page. Both roles share a key's page; role-only pages only appear in that role's NAV.
 const PAGES = {
@@ -26,12 +28,18 @@ const PAGES = {
   periode: <PeriodePage />,
   akun: <AkunPage />,
   survei: <SurveiPage />,
+  verifikasi: <VerifikasiPage />,
   pengaturan: <SettingsPage />,
 }
 
 // Pages that aren't menu items (detail/form pages), per role, relative to the role's home
 const EXTRA_ROUTES = {
-  desa: [],
+  desa: [
+    {
+      path: 'verifikasi/:id',
+      element: <VerifikasiDetailPage />,
+    },
+  ],
   rt: [
     {
       path: 'survei/:id',

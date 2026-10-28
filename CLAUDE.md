@@ -37,7 +37,10 @@ src/lib/hooks.js      useApiQuery(path | null) → { data, error, loading, reloa
 src/lib/format.js     formatRt(rt) → "RT 001 / RW 001" (null → "Seluruh desa"); formatBobot(0.3) → "0,300";
                       parseDecimal("0,3" | "0.3") → 0.3 (NaN if not a number)
                       formatTanggal(iso) → "28 Okt 2026, 14.05"
-src/lib/kriteria.js   SIFAT (label, tone, rumus), SIFAT_OPTIONS, rumusKonversi(kriteria) → "C2 = (2a + 2b) / 2", MIN_OPSI
+                      formatAngka(4.3333) → "4,333"
+src/lib/kriteria.js   SIFAT (label, tone, rumus), SIFAT_OPTIONS, rumusKonversi(kriteria) → "C2 = (2a + 2b) / 2", MIN_OPSI,
+                      nilaiKriteria(kriteria, { [pertanyaanId]: skor }) → { nilai, rumus "C2 = (5 + 4) / 2" }
+src/lib/periode.js    pilihPeriode(list, selectedId) (default: open, else newest), periodeOptions(list)
 src/lib/survei.js     STATUS_SURVEI (label, tone), JENIS_FOTO, FOTO_TYPES, MAX_FOTO_BYTES, fotoUrl(surveiId, fotoId)
 src/auth/             AuthProvider (useAuth: status, user, login, logout, refreshUser; restores session via /auth/me),
                       RequireAuth (guests → /login), RequireRole (wrong role → 403 page in place),
@@ -65,7 +68,8 @@ organisms/   self-contained sections; generic ones at the top level (Modal size 
              feature: layout/ (Sidebar, Topbar, WelcomeModal), login/, dashboard/, settings/,
              akun/ (UsersPanel, RtPanel + their modals), kk/ (KkFormModal, RtFilter), periode/,
              kriteria/ (KriteriaTable, KuesionerSection, Kriteria/Bobot/Pertanyaan/OpsiFormModal),
-             survei/ (MulaiSurveiModal, SurveiWizard → PertanyaanStep, FotoStep, RingkasanStep)
+             survei/ (MulaiSurveiModal, SurveiWizard → PertanyaanStep, FotoStep, RingkasanStep),
+             verifikasi/ (JawabanReview, FotoGallery, VerifikasiFormModal)
 templates/   page skeletons without data: DashboardTemplate (route element: sidebar + header + <Outlet/>),
              PageTemplate (title/description/actions + content column), AuthTemplate (login split screen),
              StatusTemplate (403/404)
@@ -76,7 +80,8 @@ A piece used by one page only still goes in `organisms/<feature>/` rather than i
 
 To build a menu page: create it in `src/pages/` (wrapped in `PageTemplate`) and add it to `PAGES` in
 `router.jsx` under its nav path; put its forms/panels in `components/organisms/<feature>/`.
-Pages that aren't menu items (detail/form pages such as `/rt/survei/:id` → `SurveiFormPage`) go in
+Pages that aren't menu items (detail/form pages such as `/rt/survei/:id` → `SurveiFormPage`,
+`/desa/verifikasi/:id` → `VerifikasiDetailPage`) go in
 `EXTRA_ROUTES` in `router.jsx`, per role.
 
 Survei form: answers are not shown with their scores to the RT (the answer should describe the

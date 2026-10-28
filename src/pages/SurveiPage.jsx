@@ -18,6 +18,7 @@ import PageTemplate from '../components/templates/PageTemplate.jsx'
 import { api, withQuery } from '../lib/api.js'
 import { formatRt, formatTanggal } from '../lib/format.js'
 import { useApiQuery, useDebouncedValue } from '../lib/hooks.js'
+import { periodeOptions, pilihPeriode } from '../lib/periode.js'
 import { JENIS_FOTO, STATUS_SURVEI, STATUS_SURVEI_OPTIONS } from '../lib/survei.js'
 
 const PAGE_SIZE = 10
@@ -39,10 +40,7 @@ export default function SurveiPage() {
   // { type: 'create' | 'delete', survei? }
   const [dialog, setDialog] = useState(null)
 
-  // Default: the open periode, else the newest one
-  const periode = filters.periodeId
-    ? periodeList.find((p) => String(p.id) === filters.periodeId)
-    : (periodeList.find((p) => p.status === 'open') ?? periodeList[0])
+  const periode = pilihPeriode(periodeList, filters.periodeId)
 
   const q = useDebouncedValue(filters.q.trim())
   const query = useApiQuery(
@@ -179,10 +177,7 @@ export default function SurveiPage() {
               value={filters.periodeId || String(periode.id)}
               onChange={setFilter('periodeId')}
               aria-label="Pilih periode"
-              options={periodeList.map((p) => ({
-                value: String(p.id),
-                label: `${p.nama}${p.status === 'open' ? ' (dibuka)' : ''}`,
-              }))}
+              options={periodeOptions(periodeList)}
             />
             <Select
               size="sm"

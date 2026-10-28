@@ -26,5 +26,19 @@ export function rumusKonversi(kriteria) {
   return `${kriteria.kode} = (${kode.join(' + ')}) / ${kode.length}`
 }
 
+// The criterion's value X for one survey: average of its questions' scores, with the worked formula
+// ("C4 = (4 + 5 + 3) / 3"). skorByPertanyaan = { [pertanyaanId]: skor }; value null if incomplete.
+export function nilaiKriteria(kriteria, skorByPertanyaan) {
+  const skor = kriteria.pertanyaan.map((p) => skorByPertanyaan[p.id])
+  if (!skor.length || skor.some((s) => s == null)) return { nilai: null, rumus: null }
+
+  const nilai = skor.reduce((sum, s) => sum + s, 0) / skor.length
+  const rumus =
+    skor.length === 1
+      ? `${kriteria.kode} = ${skor[0]}`
+      : `${kriteria.kode} = (${skor.join(' + ')}) / ${skor.length}`
+  return { nilai, rumus }
+}
+
 // Options the survey form needs before a question can be answered
 export const MIN_OPSI = 2

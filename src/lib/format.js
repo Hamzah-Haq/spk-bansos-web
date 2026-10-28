@@ -11,6 +11,11 @@ export function formatTanggal(iso) {
   })
 }
 
+// Plain number in Indonesian notation, up to 3 decimals: 4.3333 → "4,333", 4.5 → "4,5"
+export function formatAngka(value) {
+  return value.toLocaleString('id-ID', { maximumFractionDigits: 3 })
+}
+
 // Criteria weight in Indonesian notation: 0.3 → "0,300"
 export function formatBobot(value) {
   return value.toLocaleString('id-ID', {

@@ -3,6 +3,7 @@ import { api } from './api.js'
 
 // GET `path` and re-fetch whenever it changes or reload() is called.
 // Keeps the previous data while reloading so tables don't flash empty between pages.
+// path = null → nothing to fetch yet (e.g. depends on another query): data null, not loading.
 export function useApiQuery(path) {
   const [version, setVersion] = useState(0)
   // `key` = which request the stored result belongs to; while it differs from the current one we're loading
@@ -14,6 +15,7 @@ export function useApiQuery(path) {
   })
 
   useEffect(() => {
+    if (!path) return
     let cancelled = false
     api(path)
       .then((data) => !cancelled && setState({ key, data, error: null }))
@@ -24,10 +26,10 @@ export function useApiQuery(path) {
   }, [path, key])
 
   const reload = useCallback(() => setVersion((v) => v + 1), [])
-  const loading = state.key !== key
+  const loading = Boolean(path) && state.key !== key
 
   return {
-    data: state.data,
+    data: path ? state.data : null,
     error: loading ? null : state.error,
     loading,
     reload,

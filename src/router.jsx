@@ -14,6 +14,8 @@ import LoginPage from './pages/LoginPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 import PeriodePage from './pages/PeriodePage.jsx'
 import SettingsPage from './pages/SettingsPage.jsx'
+import SurveiFormPage from './pages/SurveiFormPage.jsx'
+import SurveiPage from './pages/SurveiPage.jsx'
 
 // Nav path → page. Both roles share a key's page; role-only pages only appear in that role's NAV.
 const PAGES = {
@@ -23,7 +25,19 @@ const PAGES = {
   kriteria: <KriteriaPage />,
   periode: <PeriodePage />,
   akun: <AkunPage />,
+  survei: <SurveiPage />,
   pengaturan: <SettingsPage />,
+}
+
+// Pages that aren't menu items (detail/form pages), per role, relative to the role's home
+const EXTRA_ROUTES = {
+  desa: [],
+  rt: [
+    {
+      path: 'survei/:id',
+      element: <SurveiFormPage />,
+    },
+  ],
 }
 
 function roleRoutes(role) {
@@ -33,10 +47,13 @@ function roleRoutes(role) {
     children: [
       {
         element: <DashboardTemplate />,
-        children: NAV[role].map(({ path, label }) => ({
-          ...(path ? { path } : { index: true }),
-          element: PAGES[path] ?? <ComingSoonPage key={path} title={label} />,
-        })),
+        children: [
+          ...NAV[role].map(({ path, label }) => ({
+            ...(path ? { path } : { index: true }),
+            element: PAGES[path] ?? <ComingSoonPage key={path} title={label} />,
+          })),
+          ...EXTRA_ROUTES[role],
+        ],
       },
     ],
   }

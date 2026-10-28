@@ -2,6 +2,15 @@ export function formatRt(rt) {
   return rt ? `RT ${rt.noRt} / RW ${rt.noRw}` : 'Seluruh desa'
 }
 
+// ISO timestamp from the API → "28 Okt 2026, 14.05"; null → "–"
+export function formatTanggal(iso) {
+  if (!iso) return '–'
+  return new Date(iso).toLocaleString('id-ID', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  })
+}
+
 // Criteria weight in Indonesian notation: 0.3 → "0,300"
 export function formatBobot(value) {
   return value.toLocaleString('id-ID', {

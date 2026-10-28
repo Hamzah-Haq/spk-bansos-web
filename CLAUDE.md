@@ -30,12 +30,15 @@ src/main.jsx          entry: RouterProvider (from react-router/dom)
 src/router.jsx        route table (createBrowserRouter from react-router)
 src/lib/api.js        fetch wrapper — always use api('/path', { method, body }); throws ApiError;
                       withQuery(path, params) drops empty params; a 401 outside /auth/* logs the user out
-src/lib/hooks.js      useApiQuery(path) → { data, error, loading, reload }; useForm(initial) → field(name),
+src/lib/hooks.js      useApiQuery(path | null) → { data, error, loading, reload } (null = don't fetch yet);
+                      useForm(initial) → field(name),
                       submit(action, validate?), errors/setErrors (list keys like 'opsi.0.label'), error,
                       submitting; useDebouncedValue
 src/lib/format.js     formatRt(rt) → "RT 001 / RW 001" (null → "Seluruh desa"); formatBobot(0.3) → "0,300";
                       parseDecimal("0,3" | "0.3") → 0.3 (NaN if not a number)
+                      formatTanggal(iso) → "28 Okt 2026, 14.05"
 src/lib/kriteria.js   SIFAT (label, tone, rumus), SIFAT_OPTIONS, rumusKonversi(kriteria) → "C2 = (2a + 2b) / 2", MIN_OPSI
+src/lib/survei.js     STATUS_SURVEI (label, tone), JENIS_FOTO, FOTO_TYPES, MAX_FOTO_BYTES, fotoUrl(surveiId, fotoId)
 src/auth/             AuthProvider (useAuth: status, user, login, logout, refreshUser; restores session via /auth/me),
                       RequireAuth (guests → /login), RequireRole (wrong role → 403 page in place),
                       roles.js (ROLE_LABELS, ROLE_HOME: desa → /desa, rt → /rt)
@@ -56,12 +59,13 @@ atoms/       single elements, no app data: Button, IconButton, Badge, Spinner, L
              control.js (shared Input/Select/Textarea classes)
 molecules/   small groups of atoms: TextField/TextAreaField/SelectField (FormField.jsx), Alert (danger |
              warning | info), Card (title + description + header actions + body), InfoRow, PageHeader,
-             Pagination, Tabs, Brand, ThemePicker, FullPageSpinner
+             Pagination, Tabs, Stepper (multi-step forms), Brand, ThemePicker, FullPageSpinner
 organisms/   self-contained sections; generic ones at the top level (Modal size sm|md, FormModal,
              ConfirmDialog, DataTable, Toast → ToastProvider/useToast), feature ones in a folder per
              feature: layout/ (Sidebar, Topbar, WelcomeModal), login/, dashboard/, settings/,
              akun/ (UsersPanel, RtPanel + their modals), kk/ (KkFormModal, RtFilter), periode/,
-             kriteria/ (KriteriaTable, KuesionerSection, Kriteria/Bobot/Pertanyaan/OpsiFormModal)
+             kriteria/ (KriteriaTable, KuesionerSection, Kriteria/Bobot/Pertanyaan/OpsiFormModal),
+             survei/ (MulaiSurveiModal, SurveiWizard → PertanyaanStep, FotoStep, RingkasanStep)
 templates/   page skeletons without data: DashboardTemplate (route element: sidebar + header + <Outlet/>),
              PageTemplate (title/description/actions + content column), AuthTemplate (login split screen),
              StatusTemplate (403/404)
@@ -72,6 +76,11 @@ A piece used by one page only still goes in `organisms/<feature>/` rather than i
 
 To build a menu page: create it in `src/pages/` (wrapped in `PageTemplate`) and add it to `PAGES` in
 `router.jsx` under its nav path; put its forms/panels in `components/organisms/<feature>/`.
+Pages that aren't menu items (detail/form pages such as `/rt/survei/:id` → `SurveiFormPage`) go in
+`EXTRA_ROUTES` in `router.jsx`, per role.
+
+Survei form: answers are not shown with their scores to the RT (the answer should describe the
+household, not aim at a result). Changed answers are saved as a draft on every step change.
 
 CRUD page pattern (see `pages/PeriodePage.jsx`): `useApiQuery` for the list → `DataTable`;
 one `dialog` state `{ type, item }`; render `FormModal`/`ConfirmDialog` only while open so forms start

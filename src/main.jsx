@@ -4,7 +4,7 @@ import { RouterProvider } from 'react-router/dom'
 import './index.css'
 import { router } from './router.jsx'
 import { AuthProvider } from './auth/AuthProvider.jsx'
-import { ToastProvider } from './components/Toast.jsx'
+import { ToastProvider } from './components/organisms/Toast.jsx'
 import { ThemeProvider } from './theme/ThemeProvider.jsx'
 import { applyTheme, loadThemeId } from './theme/themes.js'
 

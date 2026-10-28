@@ -36,20 +36,39 @@ src/lib/format.js     formatRt(rt) → "RT 001 / RW 001" (null → "Seluruh desa
 src/auth/             AuthProvider (useAuth: status, user, login, logout, refreshUser; restores session via /auth/me),
                       RequireAuth (guests → /login), RequireRole (wrong role → 403 page in place),
                       roles.js (ROLE_LABELS, ROLE_HOME: desa → /desa, rt → /rt)
-src/layouts/          AppLayout (sidebar + header + login welcome modal), navigation.js (menu per role;
-                      router builds /desa/* and /rt/* from it, unbuilt pages → ComingSoonPage)
-src/components/       shared UI: Brand, Modal (size sm|md), ThemePicker, FullPageSpinner, PageHeader,
-                      Button + IconButton, Badge, Alert, TextField/SelectField (FormField.jsx),
-                      FormModal, ConfirmDialog, DataTable + Pagination, Toast (useToast)
-src/pages/            route-level components; a feature with several files gets a folder
-                      (akun/ = Manajemen Akun: users + wilayah RT tabs, periode/, kk/ = Data KK for both roles)
+src/navigation.js     menu per role; router builds /desa/* and /rt/* from it, unbuilt pages → ComingSoonPage
+src/components/       UI in Atomic Design levels (see below)
+src/pages/            route-level components, one flat file per route
 src/theme/themes.js   color themes (constants) + applyTheme; ThemeProvider.jsx exposes useTheme()
 src/index.css         Tailwind entry; maps --theme-* vars to Tailwind colors (@theme inline)
 ```
 
-To build a menu page: create it in `src/pages/` and add it to `PAGES` in `router.jsx` under its nav path.
+### Atomic Design (`src/components/`)
 
-CRUD page pattern (see `pages/periode/PeriodePage.jsx`): `useApiQuery` for the list → `DataTable`;
+A component imports only from its own level or lower ones (atoms → molecules → organisms → templates → pages).
+
+```
+atoms/       single elements, no app data: Button, IconButton, Badge, Spinner, Label,
+             Input (invalid, size sm|md, leading icon / trailing), Select (options, placeholder),
+             control.js (shared Input/Select classes)
+molecules/   small groups of atoms: TextField/SelectField (FormField.jsx), Alert, Card (title + description
+             + body), InfoRow, PageHeader, Pagination, Tabs, Brand, ThemePicker, FullPageSpinner
+organisms/   self-contained sections; generic ones at the top level (Modal size sm|md, FormModal,
+             ConfirmDialog, DataTable, Toast → ToastProvider/useToast), feature ones in a folder per
+             feature: layout/ (Sidebar, Topbar, WelcomeModal), login/, dashboard/, settings/,
+             akun/ (UsersPanel, RtPanel + their modals), kk/ (KkFormModal, RtFilter), periode/
+templates/   page skeletons without data: DashboardTemplate (route element: sidebar + header + <Outlet/>),
+             PageTemplate (title/description/actions + content column), AuthTemplate (login split screen),
+             StatusTemplate (403/404)
+```
+
+Pages hold the route's state and data (queries, filters, `dialog`) and compose a template with organisms.
+A piece used by one page only still goes in `organisms/<feature>/` rather than inline in the page.
+
+To build a menu page: create it in `src/pages/` (wrapped in `PageTemplate`) and add it to `PAGES` in
+`router.jsx` under its nav path; put its forms/panels in `components/organisms/<feature>/`.
+
+CRUD page pattern (see `pages/PeriodePage.jsx`): `useApiQuery` for the list → `DataTable`;
 one `dialog` state `{ type, item }`; render `FormModal`/`ConfirmDialog` only while open so forms start
 fresh; on success `toast.success(...)`, close, `query.reload()`. Validate on the client for quick
 feedback, but the API is the source of truth: its `error.details` show under the matching fields.

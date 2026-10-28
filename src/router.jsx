@@ -3,16 +3,16 @@ import RequireAuth from './auth/RequireAuth.jsx'
 import RequireRole from './auth/RequireRole.jsx'
 import RoleHomeRedirect from './auth/RoleHomeRedirect.jsx'
 import { ROLE_HOME } from './auth/roles.js'
-import AppLayout from './layouts/AppLayout.jsx'
-import { NAV } from './layouts/navigation.js'
+import DashboardTemplate from './components/templates/DashboardTemplate.jsx'
+import { NAV } from './navigation.js'
+import AkunPage from './pages/AkunPage.jsx'
 import ComingSoonPage from './pages/ComingSoonPage.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
+import KkPage from './pages/KkPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
+import PeriodePage from './pages/PeriodePage.jsx'
 import SettingsPage from './pages/SettingsPage.jsx'
-import AkunPage from './pages/akun/AkunPage.jsx'
-import KkPage from './pages/kk/KkPage.jsx'
-import PeriodePage from './pages/periode/PeriodePage.jsx'
 
 // Nav path → page. Both roles share a key's page; role-only pages only appear in that role's NAV.
 const PAGES = {
@@ -30,7 +30,7 @@ function roleRoutes(role) {
     element: <RequireRole role={role} />,
     children: [
       {
-        element: <AppLayout />,
+        element: <DashboardTemplate />,
         children: NAV[role].map(({ path, label }) => ({
           ...(path ? { path } : { index: true }),
           element: PAGES[path] ?? <ComingSoonPage key={path} title={label} />,

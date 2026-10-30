@@ -8,10 +8,12 @@ import { NAV } from './navigation.js'
 import AkunPage from './pages/AkunPage.jsx'
 import ComingSoonPage from './pages/ComingSoonPage.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
+import HasilPage from './pages/HasilPage.jsx'
 import KkPage from './pages/KkPage.jsx'
 import KriteriaPage from './pages/KriteriaPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
+import PerhitunganPage from './pages/PerhitunganPage.jsx'
 import PeriodePage from './pages/PeriodePage.jsx'
 import SettingsPage from './pages/SettingsPage.jsx'
 import SurveiFormPage from './pages/SurveiFormPage.jsx'
@@ -29,6 +31,8 @@ const PAGES = {
   akun: <AkunPage />,
   survei: <SurveiPage />,
   verifikasi: <VerifikasiPage />,
+  perhitungan: <PerhitunganPage />,
+  hasil: <HasilPage />,
   pengaturan: <SettingsPage />,
 }
 

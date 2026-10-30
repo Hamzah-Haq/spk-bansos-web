@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 const SIZES = {
   sm: 'max-w-sm',
   md: 'max-w-lg',
+  lg: 'max-w-3xl',
 }
 
 export default function Modal({ open, onClose, labelledBy, size = 'sm', children }) {

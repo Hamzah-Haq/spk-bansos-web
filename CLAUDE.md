@@ -35,12 +35,16 @@ src/lib/hooks.js      useApiQuery(path | null) → { data, error, loading, reloa
                       submit(action, validate?), errors/setErrors (list keys like 'opsi.0.label'), error,
                       submitting; useDebouncedValue
 src/lib/format.js     formatRt(rt) → "RT 001 / RW 001" (null → "Seluruh desa"); formatBobot(0.3) → "0,300";
+                      formatDesimal(0.705) → "0,7050" (r and V, 4 decimals as stored);
                       parseDecimal("0,3" | "0.3") → 0.3 (NaN if not a number)
                       formatTanggal(iso) → "28 Okt 2026, 14.05"
                       formatAngka(4.3333) → "4,333"
 src/lib/kriteria.js   SIFAT (label, tone, rumus), SIFAT_OPTIONS, rumusKonversi(kriteria) → "C2 = (2a + 2b) / 2", MIN_OPSI,
                       nilaiKriteria(kriteria, { [pertanyaanId]: skor }) → { nilai, rumus "C2 = (5 + 4) / 2" }
 src/lib/periode.js    pilihPeriode(list, selectedId) (default: open, else newest), periodeOptions(list)
+src/lib/perhitungan.js kesiapanPerhitungan({ periode, ringkasan, totalBobot }) → { items, siap } (checklist before a
+                      SAW run), rincianHasil(kriteria, hasil) → per-criterion X, r, rumus, w·r; rumusNormalisasi;
+                      ATURAN_SERI (provisional tie-break text, keep in sync with the API's saw.js)
 src/lib/survei.js     STATUS_SURVEI (label, tone), PROGRESS_SEGMENTS + BELUM_DISURVEI (progress bar), JENIS_FOTO,
                       FOTO_TYPES, MAX_FOTO_BYTES, fotoUrl(surveiId, fotoId)
 src/auth/             AuthProvider (useAuth: status, user, login, logout, refreshUser; restores session via /auth/me),
@@ -65,14 +69,15 @@ molecules/   small groups of atoms: TextField/TextAreaField/SelectField (FormFie
              warning | info), Card (title + description + header actions + body), InfoRow, PageHeader,
              Pagination, Tabs, Stepper (multi-step forms), StatTile (KPI number, optional link),
              StackedBar + StackedBarLegend (part-to-whole bar), Brand, ThemePicker, FullPageSpinner
-organisms/   self-contained sections; generic ones at the top level (Modal size sm|md, FormModal,
+organisms/   self-contained sections; generic ones at the top level (Modal size sm|md|lg, FormModal,
              ConfirmDialog, DataTable, Toast → ToastProvider/useToast), feature ones in a folder per
              feature: layout/ (Sidebar, Topbar, WelcomeModal), login/, settings/,
              dashboard/ (ActionItems, SurveiProgressCard, RtProgressTable, AccountInfoCard, MenuShortcuts),
              akun/ (UsersPanel, RtPanel + their modals), kk/ (KkFormModal, RtFilter), periode/,
              kriteria/ (KriteriaTable, KuesionerSection, Kriteria/Bobot/Pertanyaan/OpsiFormModal),
              survei/ (MulaiSurveiModal, SurveiWizard → PertanyaanStep, FotoStep, RingkasanStep),
-             verifikasi/ (JawabanReview, FotoGallery, VerifikasiFormModal)
+             verifikasi/ (JawabanReview, FotoGallery, VerifikasiFormModal),
+             perhitungan/ (KesiapanCard, KriteriaSawTable, RankingTable, RincianModal = per-KK X → r → w·r → V)
 templates/   page skeletons without data: DashboardTemplate (route element: sidebar + header + <Outlet/>),
              PageTemplate (title/description/actions + content column), AuthTemplate (login split screen),
              StatusTemplate (403/404)
@@ -90,6 +95,10 @@ Pages that aren't menu items (detail/form pages such as `/rt/survei/:id` → `Su
 Charts (dashboard progress bars): survey statuses use the status tokens (success = verified,
 info = submitted, danger = rejected, muted = draft, surface-alt track = not surveyed), always with a
 legend/label and the exact counts as text; text never takes the segment color.
+
+SAW pages (desa): `/desa/perhitungan` (PerhitunganPage: readiness checklist, run, history) and `/desa/hasil`
+(HasilPage: the periode's latest run, or `?perhitungan=<id>` for an earlier one; ranking + RincianModal).
+The frontend never recomputes SAW; it only displays the stored snapshot (X, R, V, min/max, bobot).
 
 Survei form: answers are not shown with their scores to the RT (the answer should describe the
 household, not aim at a result). Changed answers are saved as a draft on every step change.

@@ -16,6 +16,14 @@ export function formatAngka(value) {
   return value.toLocaleString('id-ID', { maximumFractionDigits: 3 })
 }
 
+// Fixed decimals for SAW numbers (r, V): 0.705 → "0,7050". V is stored at 4 decimals.
+export function formatDesimal(value, digits = 4) {
+  return value.toLocaleString('id-ID', {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  })
+}
+
 // Criteria weight in Indonesian notation: 0.3 → "0,300"
 export function formatBobot(value) {
   return value.toLocaleString('id-ID', {
